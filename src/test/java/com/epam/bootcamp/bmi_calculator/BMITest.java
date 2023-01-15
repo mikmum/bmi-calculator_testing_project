@@ -5,93 +5,91 @@ import static org.junit.Assert.*;
 import org.junit.*;
 
 public class BMITest {
-	
-	App app;
-	
-	@Before
-	public void setup(){
-		app = new App();
-	}
-	
-	@Test
-	public void shouldReturnThinnessForHeightInMetersAndWeightInKgs() throws Exception{
-		app.setHeight(1.7);
-		app.setWeight(50);
-		assertEquals(app.calculateBMI(),17.3,1);
-		assertEquals(app.bmiResult(),"Thinness");
-	}
-	
-	@Test
-	public void shouldThrowExceptionForHeightZero() throws Exception{
-		try{
-			app.setHeight(0);
-			app.setWeight(50.0);
-			app.calculateBMI();
-		}catch(Exception e){
-			assertEquals(e.getMessage(),"Height is equals or less than zero.");
-		}
-	}
-	
-	@Test
-	public void shouldThrowExceptionForNegativeWeight() throws Exception{
-		try{
-			app.setHeight(1);
-			app.setWeight(-3);
-			app.calculateBMI();
-		}catch(Exception e){
-			assertEquals(e.getMessage(),"Weight is equals or less than zero.");
-		}
-	}
-	
-	@Test
-	public void shouldThrowExceptionForDifferentMetricUsed() throws Exception{
-		try{
-			app.setHeight(170);
-			app.setWeight(1764);
-			app.calculateBMI();
-		}catch(Exception e){
-			assertEquals(e.getMessage(),"Height and weight is in different metric.");
-		}
-	}
-	
-	@Test
-	public void shouldReturnThinnessForHeightInCmAndWeightInKgs() throws Exception{
-		app.setHeight(170);
-		app.setWeight(50.0);
-		assertEquals(app.calculateBMI(),17.3,1);
-		assertEquals(app.bmiResult(),"Thinness");
-	}
-	
-	@Test
-	public void shouldReturnThinnessForHeightInInchesAndWeightInOunces() throws Exception{
-		app.setHeight(5.58);
-		app.setWeight(1764);
-		assertEquals(app.calculateBMI(),17.3,1);
-		assertEquals(app.bmiResult(),"Thinness");
-	}
-	
-	@Test
-	public void shouldReturnCorrectBMIForHeightInInchesAndWeightInPounds() throws Exception{
-		app.setHeight(86.7);
-		app.setWeight(6349.3);
-		assertEquals(app.calculateBMI(),37.19,0.5);
-		assertEquals(app.bmiResult(),"Heavily overweight");
-	}
-	
-	@Test
-	public void shouldReturnCorrectBMIForHeightInFeetAndWeightInKgs() throws Exception{
-		app.setHeight(6.56);
-		app.setWeight(220.47);
-		assertEquals(app.calculateBMI(),25,0.5);
-		assertEquals(app.bmiResult(),"Overweight");
-	}
-	
-	@Test
-	public void shouldReturnCorrectBMIForHeightInCmAndWeightInKgs() throws Exception{
-		app.setHeight(200);
-		app.setWeight(80);
-		assertEquals(app.calculateBMI(),20,0.0);
-		assertEquals(app.bmiResult(),"Normal");
-	}
-	
+
+    App app;
+
+    @Before
+    public void setup() {
+        app = new App();
+    }
+
+    @Test
+    public void shouldCalculateBMICorrectlyForMetrics() throws Exception {
+        app.setHeight(1.7);
+        app.setWeight(50);
+        assertEquals(17.3, app.calculateBMI(), 1);
+    }
+
+    @Test
+    public void shouldCalculateBMICorrectlyForUSUnits() throws Exception {
+        app.setHeight(5.58);
+        app.setWeight(1764);
+        assertEquals(17.3, app.calculateBMI(), 1);
+    }
+
+    @Test
+    public void shouldThrowExceptionForHeightZero() {
+        try {
+            app.setHeight(0);
+            app.setWeight(50.0);
+            app.calculateBMI();
+        } catch (Exception e) {
+            assertEquals("Height is equals or less than zero.", e.getMessage());
+        }
+    }
+
+    @Test
+    public void shouldThrowExceptionForNegativeWeight() {
+        try {
+            app.setHeight(1);
+            app.setWeight(-3);
+            app.calculateBMI();
+        } catch (Exception e) {
+            assertEquals("Weight is equals or less than zero.", e.getMessage());
+        }
+    }
+
+    @Test
+    public void shouldThrowExceptionForDifferentMetricUsed() {
+        try {
+            app.setHeight(170);
+            app.setWeight(1764);
+            app.calculateBMI();
+        } catch (Exception e) {
+            assertEquals("Height and weight is in different metric.", e.getMessage());
+        }
+    }
+
+    @Test
+    public void shouldReturnThinnessForAdequateBMI() throws Exception {
+        app.setHeight(1.7);
+        app.setWeight(50);
+        app.calculateBMI();
+        assertEquals("Thinness", app.bmiResult());
+    }
+
+    @Test
+    public void shouldReturnNormalForAdequateBMI() throws Exception {
+        app.setHeight(1.7);
+        app.setWeight(70);
+        app.calculateBMI();
+        assertEquals("Normal", app.bmiResult());
+    }
+
+    @Test
+    public void shouldReturnOverweightForAdequateBMI() throws Exception {
+        app.setHeight(1.7);
+        app.setWeight(80);
+        app.calculateBMI();
+        assertEquals("Overweight", app.bmiResult());
+    }
+
+    @Test
+    public void shouldReturnHeavilyOverweightForAdequateBMI() throws Exception {
+        app.setHeight(1.7);
+        app.setWeight(95);
+        app.calculateBMI();
+        assertEquals("Heavily overweight", app.bmiResult());
+    }
+
 }

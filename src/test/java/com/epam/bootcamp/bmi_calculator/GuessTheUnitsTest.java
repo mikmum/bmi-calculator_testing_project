@@ -26,6 +26,13 @@ public class GuessTheUnitsTest {
     }
 
     @Test
+    public void shouldRecognizeInchesAndOuncesAsUS() throws Exception {
+        GuessTheUnits gtu = new GuessTheUnits(89, 1764);
+        assertEquals(gtu.getUnitType(), "US");
+        assertEquals(gtu.getWeight(), 110, 1);
+    }
+
+    @Test
     public void shouldThrowExceptionOnDifferentMetrics() {
         try {
             GuessTheUnits gtu = new GuessTheUnits(170, 1764);
