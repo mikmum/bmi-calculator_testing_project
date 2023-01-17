@@ -3,6 +3,7 @@ package com.epam.bootcamp.bmi_calculator;
 import static org.junit.Assert.*;
 
 import org.junit.*;
+import org.junit.function.ThrowingRunnable;
 import org.mockito.internal.util.reflection.Whitebox;
 import com.epam.bootcamp.bmi_calculator.interfaces.UnitsInterface;
 
@@ -32,6 +33,10 @@ public class BMITest {
         assertEquals(17.3, app.calculateBMI(), 1);
     }
 
+    /***
+     * That should utilize {@link Assert#assertThrows(String, Class, ThrowingRunnable)} but I'm leaving it because
+     * it provides fun results with mutation testing later on. Same with all following exception-testing methods.
+     */
     @Test
     public void shouldThrowExceptionForHeightZero() {
         try {
