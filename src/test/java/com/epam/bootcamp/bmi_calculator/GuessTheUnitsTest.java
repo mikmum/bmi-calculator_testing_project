@@ -14,20 +14,8 @@ public class GuessTheUnitsTest {
 
     @Test
     public void shouldThrowExceptionOnMetricHeightAndUSWeight() {
-        try {
-            new GuessTheUnits(METRIC_HEIGHT_IRRELEVANT, US_WEIGHT_IRRELEVANT);
-        } catch (Exception e) {
-            assertEquals("Height and weight is in different metric.", e.getMessage());
-        }
-    }
-
-    @Test
-    public void shouldThrowExceptionOnUSHeightAndMetricWeight() {
-        try {
-            new GuessTheUnits(US_HEIGHT_IRRELEVANT, METRIC_WEIGHT_IRRELEVANT);
-        } catch (Exception e) {
-            assertEquals("Height and weight is in different metric.", e.getMessage());
-        }
+        assertThrows("Height and weight is in different metric.", Exception.class,
+                () -> new GuessTheUnits(METRIC_HEIGHT_IRRELEVANT, US_WEIGHT_IRRELEVANT));
     }
 
     @Test
@@ -75,7 +63,45 @@ public class GuessTheUnitsTest {
     @Test
     public void shouldCalculateHeightFromCmToMetersCorrectly() throws Exception {
         GuessTheUnits gtu = new GuessTheUnits(170, METRIC_WEIGHT_IRRELEVANT);
-        assertEquals(1.7, gtu.getHeight(), 0.01);
+        assertEquals(1.7, gtu.getHeight(), 0);
     }
 
+    @Test
+    public void shouldGuessCmIfUnitNumberIsOneHundred() throws Exception {
+        GuessTheUnits gtu = new GuessTheUnits(100, METRIC_WEIGHT_IRRELEVANT);
+        assertEquals("metric", gtu.getUnitType());
+        assertEquals(1.0, gtu.getHeight(), 0);
+    }
+
+    @Test
+    public void shouldGuessInchesIfHeightIsExactlyTen() throws Exception {
+        GuessTheUnits gtu = new GuessTheUnits(10, US_WEIGHT_IRRELEVANT);
+        assertEquals("US", gtu.getUnitType());
+        assertEquals(10.0, gtu.getHeight(), 0);
+    }
+
+    @Test
+    public void shouldGuessMetersIfHeightIsExactlyThree() throws Exception {
+        GuessTheUnits gtu = new GuessTheUnits(3, METRIC_WEIGHT_IRRELEVANT);
+        assertEquals("metric", gtu.getUnitType());
+        assertEquals(3.0, gtu.getHeight(), 0);
+    }
+
+    @Test
+    public void shouldGuessPoundsIfWeightIsExactlyOneThousand() throws Exception {
+        App app = new App();
+        app.setWeight(1000);
+        app.setHeight(US_HEIGHT_IRRELEVANT);
+
+        GuessTheUnits gtu = new GuessTheUnits(US_HEIGHT_IRRELEVANT, 1000);
+        assertEquals("US", gtu.getUnitType());
+        assertEquals(1000, gtu.getWeight(), 0);
+    }
+
+    @Test
+    public void shouldAcceptMetricWeightExactlyOneThousand() throws Exception {
+        GuessTheUnits gtu = new GuessTheUnits(METRIC_HEIGHT_IRRELEVANT, 1000);
+        assertEquals("metric", gtu.getUnitType());
+        assertEquals(1000.0, gtu.getWeight(), 0);
+    }
 }

@@ -34,24 +34,30 @@ public class BMITest {
 
     @Test
     public void shouldThrowExceptionForHeightZero() {
-        try {
-            app.setHeight(0);
-            app.setWeight(50.0);
-            app.calculateBMI();
-        } catch (Exception e) {
-            assertEquals("Height is equals or less than zero.", e.getMessage());
-        }
+        app.setHeight(0);
+        app.setWeight(50.0);
+        assertThrows("Height is equals or less than zero.", Exception.class, () -> app.calculateBMI());
+    }
+
+    @Test
+    public void shouldThrowExceptionForNegativeHeight() {
+        app.setHeight(-1);
+        app.setWeight(50.0);
+        assertThrows("Height is equals or less than zero.", Exception.class, () -> app.calculateBMI());
     }
 
     @Test
     public void shouldThrowExceptionForNegativeWeight() {
-        try {
-            app.setHeight(1);
-            app.setWeight(-3);
-            app.calculateBMI();
-        } catch (Exception e) {
-            assertEquals("Weight is equals or less than zero.", e.getMessage());
-        }
+        app.setHeight(1);
+        app.setWeight(-3);
+        assertThrows("Height is equals or less than zero.", Exception.class, () -> app.calculateBMI());
+    }
+
+    @Test
+    public void shouldThrowExceptionForWeightZero() {
+        app.setHeight(170);
+        app.setWeight(0);
+        assertThrows("Height is equals or less than zero.", Exception.class, () -> app.calculateBMI());
     }
 
     @Test
@@ -107,20 +113,21 @@ public class BMITest {
         app.calculateBMI();
         assertEquals("Heavily overweight", app.bmiResult());
     }
-    /**
-     * Some additional notes
-     *
-     * Test that should be here but would require refactor of production code:
-     * - scenario when {@link GuessTheUnits#getUnitType()} returns something elsa than "US" or "metric". Currently not
-     * possible with production code. Regarding testing - it would require something like PowerMockito framework to
-     * mock GTU new object initialization inside {@link App#calculateBMI() method}, example
-     * {@link BMIWithPowerMockRunnerTest}, but @PrepareForTest breaks coverage both with default IntelliJ runner and
-     * JaCoCo runner. Ideally - add a factory for, and field of GuessTheUnits class. Also - we have generic
-     * {@link UnitsInterface} but we don't utilize it...
-     *
-     * 100% branch coverage in {@link App} is not achievable atm:
-     * - in line 55 "this.bmi >= 18.5" is dead code, as "this.bmi < 18.5" is checked in previous if. Mutually exclusive.
-     * - line 57, same situation with "this.bmi > 24.9" and "this.bmi <= 24.9 earlier
-     * - line 40, aforementioned issue that would require power mocking GTU initialization.
-     */
+
+    @Test
+    public void shouldReturnAdequateBMIForEdgeCases() throws Exception {
+        app.setHeight(100);
+        app.setWeight(18.5);
+        app.calculateBMI();
+        assertEquals("Normal", app.bmiResult());
+
+        app.setWeight(24.9);
+        app.calculateBMI();
+        assertEquals("Normal", app.bmiResult()); //this test is there for consistency, but does nothing regarding
+        // mutations - as mentioned, check on bmi > 24.9 is dead code due to evaluation in previous else-if
+
+        app.setWeight(29.9);
+        app.calculateBMI();
+        assertEquals("Overweight", app.bmiResult());
+    }
 }
