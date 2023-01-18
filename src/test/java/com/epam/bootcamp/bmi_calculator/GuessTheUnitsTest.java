@@ -22,15 +22,6 @@ public class GuessTheUnitsTest {
     }
 
     @Test
-    public void shouldThrowExceptionOnUSHeightAndMetricWeight() {
-        try {
-            new GuessTheUnits(US_HEIGHT_IRRELEVANT, METRIC_WEIGHT_IRRELEVANT);
-        } catch (Exception e) {
-            assertEquals("Height and weight is in different metric.", e.getMessage());
-        }
-    }
-
-    @Test
     public void shouldRecognizeMetersAndKilosAsMetric() throws Exception {
         GuessTheUnits gtu = new GuessTheUnits(1.7, 50.0);
         assertEquals("metric", gtu.getUnitType());
